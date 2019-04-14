@@ -23,15 +23,15 @@ import java.util.TimerTask;
 
 public class LoginActivity extends AppCompatActivity {
 
-    LoginActivityController controller;
-    Timer connectionChecher;
+    private LoginActivityController controller;
+    private Timer connectionChecher;
 
-    EditText nicknameEditText;
-    EditText passwordEditText;
-    Button loginButton;
-    ProgressBar progressBar;
-    RadioButton connectionIndicator;
-    CheckBox rememberLoginCheckBox;
+    private EditText nicknameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private ProgressBar progressBar;
+    private RadioButton connectionIndicator;
+    private CheckBox rememberLoginCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,11 @@ public class LoginActivity extends AppCompatActivity {
         initializeConnectionChecker();
         fillFormWithRememberedValues();
         loginButton.setOnClickListener(e -> login());
+    }
+
+    @Override
+    public void onBackPressed() {
+        // do nothing
     }
 
     public void handleSuccessfulLogin(User user) {

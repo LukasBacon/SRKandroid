@@ -1,8 +1,14 @@
 package com.lukas.srkandroid.entities;
 
+import com.lukas.srkandroid.entities.interfaces.LoadableFromJSON;
+import com.lukas.srkandroid.entities.interfaces.SelectBoxItem;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable, SelectBoxItem, LoadableFromJSON {
 
     private Integer id;
     private String nickname;
@@ -59,5 +65,20 @@ public class User implements Serializable {
                 ", lastName='" + lastName + '\'' +
                 ", admin=" + admin +
                 '}';
+    }
+
+    @Override
+    public String toSelectBoxLabel() {
+        return nickname;
+    }
+
+    @Override
+    public User loadFromJsonObject(JSONObject jsonObject) throws JSONException {
+        id = jsonObject.getInt("id");
+        nickname = jsonObject.getString("nickname");
+        firstName = jsonObject.getString("firstName");
+        lastName = jsonObject.getString("lastName");
+        admin = jsonObject.getBoolean("admin");
+        return this;
     }
 }

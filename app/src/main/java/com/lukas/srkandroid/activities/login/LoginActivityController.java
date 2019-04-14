@@ -7,7 +7,6 @@ import android.net.NetworkInfo;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.lukas.srkandroid.EntityFactory;
 import com.lukas.srkandroid.MyRequestQueue;
 import com.lukas.srkandroid.entities.User;
 
@@ -32,7 +31,12 @@ class LoginActivityController {
                 LOGIN_RESOURCE_URL,
                 jsonObject,
                 response -> {
-                    User user = EntityFactory.createUserObjectFromJSON((JSONObject)response);
+                    User user = null;
+                    try {
+                        user = new User().loadFromJsonObject(response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     activity.handleSuccessfulLogin(user);
                 },
                 error -> {

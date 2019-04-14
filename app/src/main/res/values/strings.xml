@@ -8,12 +8,11 @@
     <string name="login_activity_login_button_text">Prihlásiť</string>
     <string name="login_activity_connection_indicator_text">Internetové pripojenie:</string>
     <string name="login_activity_remember_login_text">Zapamätať prihlásenie</string>
+
     <string name="add_catch_menu_logoff_text">Odhlásiť</string>
+    <string name="add_catch_form_date_placeholder">Dátum a čas</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="add_catch_form_fisher_placeholder">Lovec</string>
 </resources>
