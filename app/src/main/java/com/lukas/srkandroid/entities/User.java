@@ -69,7 +69,7 @@ public class User implements Serializable, SelectBoxItem, LoadableFromJSON {
 
     @Override
     public String toSelectBoxLabel() {
-        return nickname;
+        return firstName + " " + lastName;
     }
 
     @Override

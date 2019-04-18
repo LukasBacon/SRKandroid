@@ -1,6 +1,11 @@
 package com.lukas.srkandroid.entities;
 
-public class Species {
+import com.lukas.srkandroid.entities.interfaces.LoadableFromJSON;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Species implements LoadableFromJSON {
 
     private Integer id;
     private String nameSk;
@@ -37,5 +42,13 @@ public class Species {
                 ", nameSk='" + nameSk + '\'' +
                 ", nameLat='" + nameLat + '\'' +
                 '}';
+    }
+
+    @Override
+    public Species loadFromJsonObject(JSONObject jsonObject) throws JSONException {
+        id = jsonObject.getInt("id");
+        nameSk = jsonObject.getString("nameSk");
+        nameLat = jsonObject.getString("nameLat");
+        return this;
     }
 }

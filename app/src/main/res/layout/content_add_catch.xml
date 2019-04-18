@@ -8,6 +8,33 @@
     tools:context=".activities.addCatch.AddCatchActivity"
     tools:showIn="@layout/app_bar_add_catch">
 
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout4"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/add_catch_form_fisher_placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+        <Spinner
+            android:id="@+id/userSelect"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:entries="@string/add_catch_form_fisher_placeholder"
+            android:prompt="@string/add_catch_form_fisher_placeholder"
+            android:spinnerMode="dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
+    </android.support.design.widget.TextInputLayout>
+
     <Button
         android:id="@+id/add_catch_btn"
         android:layout_width="wrap_content"
@@ -49,6 +76,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout5"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -57,17 +85,43 @@
         android:hint="@string/add_catch_form_fisher_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
 
         <Spinner
-            android:id="@+id/userSelect"
+            android:id="@+id/fishSelect"
             android:layout_width="368dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:entries="@string/add_catch_form_fisher_placeholder"
-            android:prompt="@string/add_catch_form_fisher_placeholder"
+            android:entries="@string/add_catch_form_fish_placeholder"
+            android:prompt="@string/add_catch_form_fish_placeholder"
+            android:spinnerMode="dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/add_catch_form_fisher_placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+
+        <Spinner
+            android:id="@+id/conditionSelect"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:entries="@string/add_catch_form_condition_placeholder"
+            android:prompt="@string/add_catch_form_condition_placeholder"
             android:spinnerMode="dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

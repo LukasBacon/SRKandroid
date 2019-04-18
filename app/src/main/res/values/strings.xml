@@ -10,9 +10,11 @@
     <string name="login_activity_remember_login_text">Zapamätať prihlásenie</string>
 
     <string name="add_catch_menu_logoff_text">Odhlásiť</string>
-    <string name="add_catch_form_date_placeholder">Dátum a čas</string>
+    <string name="add_catch_form_date_placeholder">* Dátum a čas</string>
+    <string name="add_catch_form_fisher_placeholder">* Lovec</string>
+    <string name="add_catch_form_fish_placeholder">* Ryba</string>
+    <string name="add_catch_form_condition_placeholder">* Celkový stav</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="add_catch_form_fisher_placeholder">Lovec</string>
 </resources>

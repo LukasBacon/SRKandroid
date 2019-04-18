@@ -11,13 +11,10 @@ import com.lukas.srkandroid.entities.interfaces.SelectBoxItem;
 
 public class SelectBoxItemAdapter extends ArrayAdapter<SelectBoxItem> {
 
-    private final Integer EXTRA = 1;
-    private Context context;
     private SelectBoxItem[] values;
 
     public SelectBoxItemAdapter(Context context, int itemView, SelectBoxItem[] values) {
         super(context, itemView, values);
-        this.context = context;
         this.values = values;
     }
 
