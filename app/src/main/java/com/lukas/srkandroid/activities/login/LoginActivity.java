@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.lukas.srkandroid.R;
 import com.lukas.srkandroid.activities.addCatch.AddCatchActivity;
+import com.lukas.srkandroid.activities.addCatch.AddCatch;
 import com.lukas.srkandroid.entities.User;
 
 import org.json.JSONException;
@@ -69,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
             controller.clearRememberedLogin();
         }
         Toast.makeText(this, "Boli ste úspešne prihlásený.", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, AddCatchActivity.class);
+        Intent intent = new Intent(this, AddCatch.class);
         intent.putExtra("user", (Serializable) user);
         startActivity(intent);
     }

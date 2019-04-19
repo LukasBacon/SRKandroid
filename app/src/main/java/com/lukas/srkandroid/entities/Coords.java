@@ -1,6 +1,8 @@
 package com.lukas.srkandroid.entities;
 
-public class Coords  {
+import java.io.Serializable;
+
+public class Coords implements Serializable {
 
     private Integer id;
     private Double lat;

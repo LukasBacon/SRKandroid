@@ -3,6 +3,7 @@ package com.lukas.srkandroid.activities.addCatch;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.lukas.srkandroid.MyRequestQueue;
+import com.lukas.srkandroid.activities.addCatch.fragments.FormFragment;
 import com.lukas.srkandroid.entities.Condition;
 import com.lukas.srkandroid.entities.Fish;
 import com.lukas.srkandroid.entities.User;
@@ -16,11 +17,11 @@ import java.util.List;
 
 public class AddCatchController {
 
-    final String API_URL = "http://rybarskyklub.sk/rest";
+    private static final String API_URL = "http://rybarskyklub.sk/rest";
 
-    AddCatchFormView view;
+    FormFragment view;
 
-    public AddCatchController(AddCatchFormView view) {
+    public AddCatchController(FormFragment view) {
         this.view = view;
     }
 
@@ -45,7 +46,7 @@ public class AddCatchController {
                     view.handleFetchDataError();
                 }
         );
-        MyRequestQueue.getInstance(view.getActivity().getApplicationContext()).addToRequestQueue(request);
+        MyRequestQueue.getInstance(view.getActivity()).addToRequestQueue(request);
     }
 
     public void fetchFishes() {
@@ -69,7 +70,7 @@ public class AddCatchController {
                     view.handleFetchDataError();
                 }
         );
-        MyRequestQueue.getInstance(view.getActivity().getApplicationContext()).addToRequestQueue(request);
+        MyRequestQueue.getInstance(view.getActivity()).addToRequestQueue(request);
     }
 
 
@@ -95,7 +96,7 @@ public class AddCatchController {
                     view.handleFetchDataError();
                 }
         );
-        MyRequestQueue.getInstance(view.getActivity().getApplicationContext()).addToRequestQueue(request);
+        MyRequestQueue.getInstance(view.getActivity()).addToRequestQueue(request);
     }
 
 
