@@ -14,11 +14,18 @@
     <string name="add_catch_form_fisher_placeholder">* Lovec</string>
     <string name="add_catch_form_fish_placeholder">* Ryba</string>
     <string name="add_catch_form_condition_placeholder">* Celkový stav</string>
+    <string name="add_catch_form_location_placeholder">* Poloha</string>
+    <string name="add_catch_form_weight_placeholder">* Váha</string>
+    <string name="add_catch_form_length_placeholder">* Dĺžka</string>
+    <string name="add_catch_form_height_placeholder">Výška</string>
+    <string name="add_catch_form_circuit_placeholder">Obvod</string>
+    <string name="add_catch_form_trap_placeholder">Nástraha</string>
+
+    <string name="add_catch_confirm_map_location_button_text">Potvrdiť</string>
+    <string name="add_catch_map_instructions_text">Značku môžete premiestňovať po jej dlhom podržaní.</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_maps">Map</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

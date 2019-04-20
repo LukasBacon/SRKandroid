@@ -2,8 +2,11 @@ package com.lukas.srkandroid.activities.addCatch;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.maps.model.LatLng;
 import com.lukas.srkandroid.MyRequestQueue;
 import com.lukas.srkandroid.activities.addCatch.fragments.FormFragment;
+import com.lukas.srkandroid.activities.addCatch.fragments.MapFragment;
 import com.lukas.srkandroid.entities.Condition;
 import com.lukas.srkandroid.entities.Fish;
 import com.lukas.srkandroid.entities.User;
@@ -17,13 +20,17 @@ import java.util.List;
 
 public class AddCatchController {
 
-    private static final String API_URL = "http://rybarskyklub.sk/rest";
+    private final String API_URL = "http://rybarskyklub.sk/rest";
+    private final String LOCATION_INFO_URL = "http://ip-api.com/json";
 
-    FormFragment view;
+    private FormFragment formFragment;
+    private MapFragment mapFragment;
 
-    public AddCatchController(FormFragment view) {
-        this.view = view;
+    public AddCatchController(FormFragment formFragment) {
+        this.formFragment = formFragment;
     }
+
+    public AddCatchController(MapFragment mapFragment) { this.mapFragment = mapFragment; }
 
     public void fetchUsers() {
         JsonArrayRequest request = new JsonArrayRequest(
@@ -41,12 +48,12 @@ public class AddCatchController {
                             e.printStackTrace();
                         }
                     }
-                    view.setUsers(users);
+                    formFragment.setUsers(users);
                 }, error -> {
-                    view.handleFetchDataError();
+            formFragment.handleFetchDataError();
                 }
         );
-        MyRequestQueue.getInstance(view.getActivity()).addToRequestQueue(request);
+        MyRequestQueue.getInstance(formFragment.getActivity()).addToRequestQueue(request);
     }
 
     public void fetchFishes() {
@@ -65,12 +72,12 @@ public class AddCatchController {
                             e.printStackTrace();
                         }
                     }
-                    view.setFishes(fishes);
+                    formFragment.setFishes(fishes);
                 }, error -> {
-                    view.handleFetchDataError();
+            formFragment.handleFetchDataError();
                 }
         );
-        MyRequestQueue.getInstance(view.getActivity()).addToRequestQueue(request);
+        MyRequestQueue.getInstance(formFragment.getActivity()).addToRequestQueue(request);
     }
 
 
@@ -91,12 +98,33 @@ public class AddCatchController {
                             e.printStackTrace();
                         }
                     }
-                    view.setConditions(conditions);
+                    formFragment.setConditions(conditions);
                 }, error -> {
-                    view.handleFetchDataError();
+            formFragment.handleFetchDataError();
                 }
         );
-        MyRequestQueue.getInstance(view.getActivity()).addToRequestQueue(request);
+        MyRequestQueue.getInstance(formFragment.getActivity()).addToRequestQueue(request);
+    }
+
+    public void getLocationInfo() {
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                LOCATION_INFO_URL,
+                null,
+                (JSONObject locationJson) -> {
+                    LatLng position = null;
+                    try {
+                        position = new LatLng(locationJson.getDouble("lat"),
+                                              locationJson.getDouble("lon"));
+                        mapFragment.setMarkerOnPosition(position);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    error.printStackTrace();
+                }
+        );
+        MyRequestQueue.getInstance(mapFragment.getActivity()).addToRequestQueue(request);
     }
 
 

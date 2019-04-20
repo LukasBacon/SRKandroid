@@ -3,7 +3,9 @@ package com.lukas.srkandroid.activities.addCatch.fragments;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.lukas.srkandroid.R;
 import com.lukas.srkandroid.activities.addCatch.AddCatchController;
 import com.lukas.srkandroid.activities.addCatch.NothingSelectedSelectBoxAdapter;
 import com.lukas.srkandroid.activities.addCatch.SelectBoxItemAdapter;
 import com.lukas.srkandroid.activities.addCatch.AddCatch;
+import com.lukas.srkandroid.activities.addCatch.ThreeDecimalPlacesNumberFilter;
 import com.lukas.srkandroid.entities.Condition;
 import com.lukas.srkandroid.entities.Fish;
 import com.lukas.srkandroid.entities.User;
@@ -33,6 +37,7 @@ public class FormFragment extends Fragment {
     private List<User> users;
     private List<Fish> fishes;
     private List<Condition> conditions;
+    private LatLng location;
     Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC+01:00"));
 
     private Button addCatchBtn;
@@ -40,6 +45,12 @@ public class FormFragment extends Fragment {
     private Spinner userSelect;
     private Spinner fishSelect;
     private Spinner conditionSelect;
+    private EditText locationText;
+    private EditText weightText;
+    private EditText lengthText;
+    private EditText heightText;
+    private EditText circuitText;
+    private EditText trapText;
 
     public FormFragment() {
         controller = new AddCatchController(this);
@@ -56,14 +67,25 @@ public class FormFragment extends Fragment {
 
         dateText = view.findViewById(R.id.dateText);
         dateText.setText(calendarToString(c));
-        addCatchBtn = view.findViewById(R.id.add_catch_btn);
+        addCatchBtn = view.findViewById(R.id.addCatchBtn);
         userSelect = view.findViewById(R.id.userSelect);
         fishSelect = view.findViewById(R.id.fishSelect);
         conditionSelect = view.findViewById(R.id.conditionSelect);
+        locationText = view.findViewById(R.id.locationText);
+        weightText = view.findViewById(R.id.weightText);
+        lengthText = view.findViewById(R.id.lengthText);
+        heightText = view.findViewById(R.id.heightText);
+        circuitText = view.findViewById(R.id.circuitText);
+        weightText.setFilters(new InputFilter[]{new ThreeDecimalPlacesNumberFilter()});
+        lengthText.setFilters(new InputFilter[]{new ThreeDecimalPlacesNumberFilter()});
+        heightText.setFilters(new InputFilter[]{new ThreeDecimalPlacesNumberFilter()});
+        circuitText.setFilters(new InputFilter[]{new ThreeDecimalPlacesNumberFilter()});
+        trapText = view.findViewById(R.id.trapText);
 
         dateText.setOnClickListener(e -> pickDate());
+        locationText.setOnClickListener(e -> pickLocation());
         addCatchBtn.setOnClickListener(e -> {
-            ((AddCatch)getActivity()).showMap();
+            // TODO pridaj odchyt
         });
         return view;
     }
@@ -97,6 +119,15 @@ public class FormFragment extends Fragment {
                 conditions.toArray(new Condition[]{})
         );
         conditionSelect.setAdapter(adapter);
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
+        locationText.setText(String.format("lat=%f, lng=%f", location.latitude, location.longitude));
+    }
+
+    private void pickLocation() {
+        ((AddCatch)getActivity()).showMap();
     }
 
     private void pickDate(){
@@ -134,7 +165,4 @@ public class FormFragment extends Fragment {
                 getActivity()
         );
     }
-
-
-
 }

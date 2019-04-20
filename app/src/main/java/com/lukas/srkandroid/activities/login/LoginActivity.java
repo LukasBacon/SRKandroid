@@ -12,7 +12,6 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.lukas.srkandroid.R;
-import com.lukas.srkandroid.activities.addCatch.AddCatchActivity;
 import com.lukas.srkandroid.activities.addCatch.AddCatch;
 import com.lukas.srkandroid.entities.User;
 

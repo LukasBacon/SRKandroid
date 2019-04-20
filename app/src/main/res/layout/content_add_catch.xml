@@ -9,7 +9,7 @@
     tools:showIn="@layout/app_bar_add_catch">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout4"
+        android:id="@+id/userInput"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -18,7 +18,7 @@
         android:hint="@string/add_catch_form_fisher_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/dateTimeInput">
 
         <Spinner
             android:id="@+id/userSelect"
@@ -32,7 +32,7 @@
             android:spinnerMode="dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
+            app:layout_constraintTop_toBottomOf="@+id/dateTimeInput" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
@@ -46,7 +46,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout3"
+        android:id="@+id/dateTimeInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -76,7 +76,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayout5"
+        android:id="@+id/fishInut"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -85,7 +85,7 @@
         android:hint="@string/add_catch_form_fisher_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/userInput">
 
         <Spinner
             android:id="@+id/fishSelect"
@@ -99,7 +99,7 @@
             android:spinnerMode="dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
+            app:layout_constraintTop_toBottomOf="@+id/dateTimeInput" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -111,7 +111,7 @@
         android:hint="@string/add_catch_form_fisher_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/fishInut">
 
         <Spinner
             android:id="@+id/conditionSelect"
@@ -125,7 +125,7 @@
             android:spinnerMode="dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
+            app:layout_constraintTop_toBottomOf="@+id/dateTimeInput" />
     </android.support.design.widget.TextInputLayout>
     
 </android.support.constraint.ConstraintLayout>
