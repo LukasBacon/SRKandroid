@@ -51,6 +51,8 @@ public class FormFragment extends Fragment {
     private EditText heightText;
     private EditText circuitText;
     private EditText trapText;
+    private EditText conditionDescriptionText;
+    private EditText notesText;
 
     public FormFragment() {
         controller = new AddCatchController(this);
@@ -81,6 +83,8 @@ public class FormFragment extends Fragment {
         heightText.setFilters(new InputFilter[]{new ThreeDecimalPlacesNumberFilter()});
         circuitText.setFilters(new InputFilter[]{new ThreeDecimalPlacesNumberFilter()});
         trapText = view.findViewById(R.id.trapText);
+        conditionDescriptionText = view.findViewById(R.id.conditionDescriptionText);
+        notesText = view.findViewById(R.id.notesText);
 
         dateText.setOnClickListener(e -> pickDate());
         locationText.setOnClickListener(e -> pickLocation());
