@@ -26,7 +26,6 @@ import com.lukas.srkandroid.entities.User;
 
 public class AddCatch extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Catch catch0;
     private User user;
 
     private FormFragment formFragment;
@@ -39,7 +38,6 @@ public class AddCatch extends AppCompatActivity implements NavigationView.OnNavi
 
         Intent i = getIntent();
         user = (User) i.getSerializableExtra("user");
-        catch0 = new Catch();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,8 +65,8 @@ public class AddCatch extends AppCompatActivity implements NavigationView.OnNavi
         showFragment(R.id.contentFragment, formFragment, "formFragment", "mapFragment", false);
     }
 
-    public Catch getCatch() {
-        return catch0;
+    public User getUser() {
+        return user;
     }
 
     public void setLocation(LatLng location) {

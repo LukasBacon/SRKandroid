@@ -1,4 +1,4 @@
-package com.lukas.srkandroid.activities.addCatch;
+package com.lukas.srkandroid.activities.addCatch.fragments.formInputsClasses;
 
 import android.content.Context;
 import android.graphics.Color;

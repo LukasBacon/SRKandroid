@@ -1,4 +1,4 @@
-package com.lukas.srkandroid.activities.addCatch;
+package com.lukas.srkandroid.activities.addCatch.fragments.formInputsClasses;
 
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;

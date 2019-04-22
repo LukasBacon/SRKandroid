@@ -22,6 +22,10 @@
     <string name="add_catch_form_circuit_placeholder">Obvod</string>
     <string name="add_catch_form_trap_placeholder">Nástraha</string>
     <string name="add_catch_form_notes_placeholder">Poznámka</string>
+    <string name="add_catch_form_left_head_photo_placeholder">Fotka hlavy zľava</string>
+    <string name="add_catch_form_right_head_photo_placeholder">Fotka hlavy sprava</string>
+    <string name="add_catch_form_optional_photos_placeholder">Ostatné fotky</string>
+    <string name="add_catch_button_text">Pridať odchyt</string>
 
     <string name="add_catch_confirm_map_location_button_text">Potvrdiť</string>
     <string name="add_catch_map_instructions_text">Značku môžete premiestňovať po jej dlhom podržaní.</string>

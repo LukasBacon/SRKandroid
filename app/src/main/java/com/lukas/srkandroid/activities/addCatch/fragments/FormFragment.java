@@ -1,36 +1,52 @@
 package com.lukas.srkandroid.activities.addCatch.fragments;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.lukas.srkandroid.R;
 import com.lukas.srkandroid.activities.addCatch.AddCatchController;
-import com.lukas.srkandroid.activities.addCatch.NothingSelectedSelectBoxAdapter;
-import com.lukas.srkandroid.activities.addCatch.SelectBoxItemAdapter;
+import com.lukas.srkandroid.activities.addCatch.fragments.formInputsClasses.NothingSelectedSelectBoxAdapter;
+import com.lukas.srkandroid.activities.addCatch.fragments.formInputsClasses.SelectBoxItemAdapter;
 import com.lukas.srkandroid.activities.addCatch.AddCatch;
-import com.lukas.srkandroid.activities.addCatch.ThreeDecimalPlacesNumberFilter;
+import com.lukas.srkandroid.activities.addCatch.fragments.formInputsClasses.ThreeDecimalPlacesNumberFilter;
+import com.lukas.srkandroid.entities.Catch;
 import com.lukas.srkandroid.entities.Condition;
 import com.lukas.srkandroid.entities.Fish;
 import com.lukas.srkandroid.entities.User;
 import com.lukas.srkandroid.entities.interfaces.SelectBoxItem;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class FormFragment extends Fragment {
+
+    private final int RIGHT_HEAD_PHOTO_ID = 2;
+    private final int LEFT_HEAD_PHOTO_ID = 3;
+    private final int OPTIONAL_PHOTO_ID = 4;
 
     private AddCatchController controller;
 
@@ -53,6 +69,16 @@ public class FormFragment extends Fragment {
     private EditText trapText;
     private EditText conditionDescriptionText;
     private EditText notesText;
+
+    private ImageView rightHeadPhoto;
+    private Bitmap rightHeadPhotoBmp;
+
+    private ImageView leftHeadPhoto;
+    private Bitmap leftHeadPhotoBmp;
+
+    private ImageView optionalPhotoInput;
+    private LinearLayout optionalPhotosList;
+    private Map<ImageView,Bitmap> optionalPhotos = new HashMap<>();
 
     public FormFragment() {
         controller = new AddCatchController(this);
@@ -85,17 +111,22 @@ public class FormFragment extends Fragment {
         trapText = view.findViewById(R.id.trapText);
         conditionDescriptionText = view.findViewById(R.id.conditionDescriptionText);
         notesText = view.findViewById(R.id.notesText);
+        rightHeadPhoto = view.findViewById(R.id.rightHeadPhoto);
+        leftHeadPhoto = view.findViewById(R.id.leftHeadPhoto);
+        optionalPhotoInput = view.findViewById(R.id.optionalPhotoInput);
+        optionalPhotosList = view.findViewById(R.id.optionalPhotosList);
 
         dateText.setOnClickListener(e -> pickDate());
         locationText.setOnClickListener(e -> pickLocation());
-        addCatchBtn.setOnClickListener(e -> {
-            // TODO pridaj odchyt
-        });
+        rightHeadPhoto.setOnClickListener(e -> pickPhoto(RIGHT_HEAD_PHOTO_ID));
+        leftHeadPhoto.setOnClickListener(e -> pickPhoto(LEFT_HEAD_PHOTO_ID));
+        optionalPhotoInput.setOnClickListener(e -> pickPhoto(OPTIONAL_PHOTO_ID));
+        addCatchBtn.setOnClickListener(e -> { addCatch(); });
         return view;
     }
 
     public void handleFetchDataError() {
-        // TODO
+        Toast.makeText(getContext(), "Chyba pri načítavaní údajov.", Toast.LENGTH_LONG).show();
     }
 
     public void setUsers(List<User> users) {
@@ -169,4 +200,63 @@ public class FormFragment extends Fragment {
                 getActivity()
         );
     }
+
+    private void pickPhoto(int photoTypeId) {
+        startActivityForResult(
+                new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI),
+                photoTypeId);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            try {
+                Bitmap bmp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                if (requestCode == RIGHT_HEAD_PHOTO_ID) {
+                    rightHeadPhotoBmp = bmp;
+                    rightHeadPhoto.setImageBitmap(rightHeadPhotoBmp);
+                }
+                if (requestCode == LEFT_HEAD_PHOTO_ID) {
+                    leftHeadPhotoBmp = bmp;
+                    leftHeadPhoto.setImageBitmap(leftHeadPhotoBmp);
+                }
+                if (requestCode == OPTIONAL_PHOTO_ID) {
+                    ImageView imageView = new ImageView(getContext());
+                    optionalPhotos.put(imageView, bmp);
+                    optionalPhotosList.addView(imageView);
+                    imageView.setImageBitmap(bmp);
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                    lp.width = 300;
+                    lp.height = 300;
+                    lp.setMargins(0, 20, 0, 0);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageView.setOnClickListener(view -> {
+                        optionalPhotos.remove(view);
+                        ((ViewManager)view.getParent()).removeView(view);
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void addCatch() {
+        String errorMessage = validateForm();
+        if (errorMessage != null) {
+            Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Catch catch0 = new Catch();
+        // TODO napln a postni
+    }
+
+    private String validateForm() {
+        // TODO validate
+        return null;
+    }
+
 }
