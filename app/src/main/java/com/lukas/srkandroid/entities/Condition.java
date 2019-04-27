@@ -2,11 +2,12 @@ package com.lukas.srkandroid.entities;
 
 import com.lukas.srkandroid.entities.interfaces.LoadableFromJSON;
 import com.lukas.srkandroid.entities.interfaces.SelectBoxItem;
+import com.lukas.srkandroid.entities.interfaces.WritableToJSON;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Condition implements SelectBoxItem, LoadableFromJSON {
+public class Condition implements SelectBoxItem, LoadableFromJSON, WritableToJSON {
 
     private Integer id;
     private String name;
@@ -45,5 +46,13 @@ public class Condition implements SelectBoxItem, LoadableFromJSON {
         id = jsonObject.getInt("id");
         name = jsonObject.getString("name");
         return this;
+    }
+
+    @Override
+    public JSONObject toJSON() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", id);
+        jsonObject.put("name", name);
+        return jsonObject;
     }
 }

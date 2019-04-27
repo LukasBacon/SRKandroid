@@ -1,6 +1,7 @@
 package com.lukas.srkandroid.activities.login;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         controller = new LoginActivityController(this);
         connectionChecher = new Timer();
         setContentView(R.layout.activity_login);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         nicknameEditText = findViewById(R.id.nickname);
         passwordEditText = findViewById(R.id.password);
@@ -80,10 +83,13 @@ public class LoginActivity extends AppCompatActivity {
 
     public void handleUnSuccessfulLogin() {
         progressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(this, "Nesprávne prihlasovacie údaje.", Toast.LENGTH_LONG).show();
     }
 
     private void login() {
+        if (controller.checkNetworkConnection() == false) {
+            Toast.makeText(this, "Žiadne internetové pripojenie.", Toast.LENGTH_LONG).show();
+            return;
+        }
         progressBar.setVisibility(View.VISIBLE);
         try {
             controller.login(nicknameEditText.getText().toString(), passwordEditText.getText().toString());

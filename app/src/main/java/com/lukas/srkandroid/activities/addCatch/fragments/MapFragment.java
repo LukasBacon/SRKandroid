@@ -52,6 +52,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
         confirmButton = view.findViewById(R.id.confirmMapBtn);
         confirmButton.setOnClickListener(e -> {
+            if (location == null) {
+                return;
+            }
             AddCatch activity = (AddCatch) getActivity();
             activity.setLocation(location);
             activity.showForm();
@@ -74,6 +77,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Location myLocation = locationManager.getLastKnownLocation(locationManager
                 .getBestProvider(criteria, false));
 
+        if (myLocation == null){
+            controller.getLocationInfo();
+            return;
+        }
         LatLng position = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
         setMarkerOnPosition(position);
     }

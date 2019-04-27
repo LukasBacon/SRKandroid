@@ -16,10 +16,10 @@
     <string name="add_catch_form_condition_placeholder">* Celkový stav</string>
     <string name="add_catch_form_condition_description_placeholder">* Celkový stav a kondácia (popis)</string>
     <string name="add_catch_form_location_placeholder">* Poloha</string>
-    <string name="add_catch_form_weight_placeholder">* Váha</string>
-    <string name="add_catch_form_length_placeholder">* Dĺžka</string>
-    <string name="add_catch_form_height_placeholder">Výška</string>
-    <string name="add_catch_form_circuit_placeholder">Obvod</string>
+    <string name="add_catch_form_weight_placeholder">* Váha (kg)</string>
+    <string name="add_catch_form_length_placeholder">* Dĺžka (cm)</string>
+    <string name="add_catch_form_height_placeholder">Výška (cm)</string>
+    <string name="add_catch_form_circuit_placeholder">Obvod (cm)</string>
     <string name="add_catch_form_trap_placeholder">Nástraha</string>
     <string name="add_catch_form_notes_placeholder">Poznámka</string>
     <string name="add_catch_form_left_head_photo_placeholder">Fotka hlavy zľava</string>

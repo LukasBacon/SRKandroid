@@ -1,5 +1,6 @@
 package com.lukas.srkandroid.activities.addCatch.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -11,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,7 @@ import com.lukas.srkandroid.activities.addCatch.AddCatch;
 import com.lukas.srkandroid.activities.addCatch.fragments.formInputsClasses.ThreeDecimalPlacesNumberFilter;
 import com.lukas.srkandroid.entities.Catch;
 import com.lukas.srkandroid.entities.Condition;
+import com.lukas.srkandroid.entities.Coords;
 import com.lukas.srkandroid.entities.Fish;
 import com.lukas.srkandroid.entities.User;
 import com.lukas.srkandroid.entities.interfaces.SelectBoxItem;
@@ -40,7 +43,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 public class FormFragment extends Fragment {
 
@@ -54,7 +56,7 @@ public class FormFragment extends Fragment {
     private List<Fish> fishes;
     private List<Condition> conditions;
     private LatLng location;
-    Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC+01:00"));
+    Calendar c = Calendar.getInstance();
 
     private Button addCatchBtn;
     private EditText dateText;
@@ -69,6 +71,7 @@ public class FormFragment extends Fragment {
     private EditText trapText;
     private EditText conditionDescriptionText;
     private EditText notesText;
+    private View formLayout;
 
     private ImageView rightHeadPhoto;
     private Bitmap rightHeadPhotoBmp;
@@ -88,6 +91,7 @@ public class FormFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_form, container, false);
+        c.setTimeInMillis(System.currentTimeMillis());
 
         controller.fetchUsers();
         controller.fetchFishes();
@@ -96,6 +100,7 @@ public class FormFragment extends Fragment {
         dateText = view.findViewById(R.id.dateText);
         dateText.setText(calendarToString(c));
         addCatchBtn = view.findViewById(R.id.addCatchBtn);
+        addCatchBtn.setVisibility(View.VISIBLE);
         userSelect = view.findViewById(R.id.userSelect);
         fishSelect = view.findViewById(R.id.fishSelect);
         conditionSelect = view.findViewById(R.id.conditionSelect);
@@ -115,6 +120,9 @@ public class FormFragment extends Fragment {
         leftHeadPhoto = view.findViewById(R.id.leftHeadPhoto);
         optionalPhotoInput = view.findViewById(R.id.optionalPhotoInput);
         optionalPhotosList = view.findViewById(R.id.optionalPhotosList);
+        formLayout = view.findViewById(R.id.formLayout);
+
+        handleUserSelect();
 
         dateText.setOnClickListener(e -> pickDate());
         locationText.setOnClickListener(e -> pickLocation());
@@ -123,6 +131,18 @@ public class FormFragment extends Fragment {
         optionalPhotoInput.setOnClickListener(e -> pickPhoto(OPTIONAL_PHOTO_ID));
         addCatchBtn.setOnClickListener(e -> { addCatch(); });
         return view;
+    }
+
+    private void handleUserSelect() {
+        if (((AddCatch)getActivity()).getUser().isAdmin() == false) {
+            userSelect.setVisibility(View.GONE);
+        }
+    }
+
+    public void clear() {
+        Intent intent = getActivity().getIntent();
+        getActivity().finish();
+        startActivity(intent);
     }
 
     public void handleFetchDataError() {
@@ -159,6 +179,11 @@ public class FormFragment extends Fragment {
     public void setLocation(LatLng location) {
         this.location = location;
         locationText.setText(String.format("lat=%f, lng=%f", location.latitude, location.longitude));
+    }
+
+    public void showButton() {
+       addCatchBtn.setVisibility(View.VISIBLE);
+
     }
 
     private void pickLocation() {
@@ -245,18 +270,96 @@ public class FormFragment extends Fragment {
     }
 
     private void addCatch() {
+        addCatchBtn.setVisibility(View.INVISIBLE);
         String errorMessage = validateForm();
         if (errorMessage != null) {
+            addCatchBtn.setVisibility(View.VISIBLE);
             Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
             return;
         }
-        Catch catch0 = new Catch();
-        // TODO napln a postni
+        Catch catch0 = createCatchInstanceFromForm();
+        controller.addCatch(catch0, rightHeadPhotoBmp, leftHeadPhotoBmp, optionalPhotos);
     }
 
     private String validateForm() {
-        // TODO validate
+        if (((AddCatch)getActivity()).getUser().isAdmin() && userSelect.getSelectedItem() == null) {
+            return "Treba vybrať lovca odchytu.";
+        }
+        if (fishSelect.getSelectedItem() == null) {
+            return "Treba vybrať rybu.";
+        }
+        if (locationText.getText().toString().isEmpty()) {
+            return "Treba zadať polohu odchytu.";
+        }
+        if (weightText.getText().toString().isEmpty()) {
+            return "Treba zadať váhu ryby.";
+        }
+        if (lengthText.getText().toString().isEmpty()) {
+            return "Treba zadať dĺžku ryby.";
+        }
+        if (conditionSelect.getSelectedItem() == null) {
+            return "Treba vybrať celkový stav ryby.";
+        }
+        if (conditionDescriptionText.getText().toString().isEmpty()) {
+            return "Treba zadať celkový stav a kondíciu ryby (popis).";
+        }
+        if (rightHeadPhotoBmp == null) {
+            return "Treba vybrať fotku hlavy ryby sprava.";
+        }
+        if (leftHeadPhotoBmp == null) {
+            return "Treba vybrať fotku hlavy ryby zľava.";
+        }
         return null;
+    }
+
+    private Catch createCatchInstanceFromForm() {
+        Catch catch0 = new Catch();
+        catch0.setAdded(getDateTimeInFormat());
+        User loggedUser = ((AddCatch)getActivity()).getUser();
+        if (loggedUser.isAdmin()) {
+            catch0.setFisher((User) userSelect.getSelectedItem());
+        }
+        else {
+            catch0.setFisher(loggedUser);
+        }
+        catch0.setFish((Fish) fishSelect.getSelectedItem());
+        catch0.setCoords(locationToCoords());
+        catch0.setWeight(Double.parseDouble(weightText.getText().toString().trim()));
+        catch0.setLength(Double.parseDouble(lengthText.getText().toString().trim()));
+        catch0.setCondition((Condition) conditionSelect.getSelectedItem());
+        catch0.setHealthCondition(conditionDescriptionText.getText().toString().trim());
+        String height = heightText.getText().toString().trim();
+        String circuit = circuitText.getText().toString().trim();
+        catch0.setHeight(height.isEmpty() ? null : Double.valueOf(height));
+        catch0.setCircuit(circuit.isEmpty() ? null : Double.valueOf(circuit));
+        String trap = trapText.getText().toString().trim();
+        String notes = notesText.getText().toString().trim();
+        catch0.setTrap(trap.isEmpty() ? null : trap);
+        catch0.setNotes(notes.isEmpty() ? null : notes);
+        return catch0;
+    }
+
+    @SuppressLint("DefaultLocale")
+    private String getDateTimeInFormat() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%04d", c.get(Calendar.YEAR)));
+        sb.append("-");
+        sb.append(String.format("%02d", c.get(Calendar.MONTH)));
+        sb.append("-");
+        sb.append(String.format("%02d", c.get(Calendar.DAY_OF_MONTH) + 1));
+        sb.append("T");
+        sb.append(String.format("%02d", c.get(Calendar.HOUR_OF_DAY)));
+        sb.append(":");
+        sb.append(String.format("%02d", c.get(Calendar.MINUTE)));
+        sb.append(":00.000Z");
+        return sb.toString();
+    }
+
+    private Coords locationToCoords() {
+        Coords coords = new Coords();
+        coords.setLat(location.latitude);
+        coords.setLng(location.longitude);
+        return coords;
     }
 
 }

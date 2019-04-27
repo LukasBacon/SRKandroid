@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.lukas.srkandroid.API;
 import com.lukas.srkandroid.MyRequestQueue;
 import com.lukas.srkandroid.entities.User;
 
@@ -15,7 +19,7 @@ import org.json.JSONObject;
 
 class LoginActivityController {
 
-    final String LOGIN_RESOURCE_URL = "http://rybarskyklub.sk/rest/users/auth";
+    final String LOGIN_RESOURCE_URL = API.URL + "/users/auth";
     LoginActivity activity;
 
     public LoginActivityController(LoginActivity activity) {
@@ -40,7 +44,14 @@ class LoginActivityController {
                     activity.handleSuccessfulLogin(user);
                 },
                 error -> {
+                    Log.i("login", error.getMessage());
                     activity.handleUnSuccessfulLogin();
+                    if (error.getMessage().contains("org.json.JSONException")) {
+                        Toast.makeText(activity.getApplicationContext(), "Nesprávne prihlasovacie údaje.", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(activity.getApplicationContext(), "Nastala chyba pri prihlásení.", Toast.LENGTH_LONG).show();
+                    }
                 });
         MyRequestQueue.getInstance(activity.getApplicationContext()).addToRequestQueue(request);
     }

@@ -1,11 +1,12 @@
 package com.lukas.srkandroid.entities;
 
 import com.lukas.srkandroid.entities.interfaces.LoadableFromJSON;
+import com.lukas.srkandroid.entities.interfaces.WritableToJSON;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Species implements LoadableFromJSON {
+public class Species implements LoadableFromJSON, WritableToJSON {
 
     private Integer id;
     private String nameSk;
@@ -50,5 +51,14 @@ public class Species implements LoadableFromJSON {
         nameSk = jsonObject.getString("nameSk");
         nameLat = jsonObject.getString("nameLat");
         return this;
+    }
+
+    @Override
+    public JSONObject toJSON() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", id);
+        jsonObject.put("nameSk", nameSk);
+        jsonObject.put("nameLat", nameLat);
+        return jsonObject;
     }
 }

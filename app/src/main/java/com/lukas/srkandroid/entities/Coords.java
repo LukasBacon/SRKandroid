@@ -1,8 +1,13 @@
 package com.lukas.srkandroid.entities;
 
+import com.lukas.srkandroid.entities.interfaces.WritableToJSON;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
-public class Coords implements Serializable {
+public class Coords implements Serializable, WritableToJSON {
 
     private Integer id;
     private Double lat;
@@ -39,5 +44,14 @@ public class Coords implements Serializable {
                 ", lat=" + lat +
                 ", lng=" + lng +
                 '}';
+    }
+
+    @Override
+    public JSONObject toJSON() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", id);
+        jsonObject.put("lat", lat);
+        jsonObject.put("lng", lng);
+        return jsonObject;
     }
 }

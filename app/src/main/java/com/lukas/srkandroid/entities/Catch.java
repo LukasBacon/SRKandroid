@@ -1,15 +1,20 @@
 package com.lukas.srkandroid.entities;
 
-public class Catch {
+import com.lukas.srkandroid.entities.interfaces.WritableToJSON;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Catch implements WritableToJSON {
 
     private Integer id;
     private User fisher;
     private Fish fish;
     private Coords coords;
-    private double weight;
-    private double length;
-    private double height;
-    private double circuit;
+    private Double weight;
+    private Double length;
+    private Double height;
+    private Double circuit;
     private Condition condition;
     private String healthCondition;
     private String trap;
@@ -52,31 +57,31 @@ public class Catch {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
-    public double getLength() {
+    public Double getLength() {
         return length;
     }
 
-    public void setLength(double length) {
+    public void setLength(Double length) {
         this.length = length;
     }
 
-    public double getHeight() {
+    public Double getHeight() {
         return height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
 
-    public double getCircuit() {
+    public Double getCircuit() {
         return circuit;
     }
 
-    public void setCircuit(double circuit) {
+    public void setCircuit(Double circuit) {
         this.circuit = circuit;
     }
 
@@ -139,4 +144,22 @@ public class Catch {
                 '}';
     }
 
+    @Override
+    public JSONObject toJSON() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", id);
+        jsonObject.put("fisher", fisher.toJSON());
+        jsonObject.put("fish", fish.toJSON());
+        jsonObject.put("coords", coords.toJSON());
+        jsonObject.put("weight", weight);
+        jsonObject.put("length", length);
+        jsonObject.put("height", height);
+        jsonObject.put("circuit", circuit);
+        jsonObject.put("condition", condition.toJSON());
+        jsonObject.put("healthCondition", healthCondition);
+        jsonObject.put("trap", trap);
+        jsonObject.put("notes", notes);
+        jsonObject.put("added", added);
+        return jsonObject;
+    }
 }
