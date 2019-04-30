@@ -1,6 +1,7 @@
 package com.lukas.srkandroid.activities.addCatch;
 
 import android.graphics.Bitmap;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,7 +30,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.MultipartBody.Part;
@@ -160,13 +164,18 @@ public class AddCatchController {
         }
 
         OkHttpClient client = new OkHttpClient();
-        try {
-            Response response = client.newCall(request).execute();
-            Integer catchId = Integer.valueOf(response.body().string());
-            uploadFilesToCatch(catchId, rightHeadPhotoBmp, leftHeadPhotoBmp, optionalPhotos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Integer catchId = Integer.valueOf(response.body().string());
+                uploadFilesToCatch(catchId, rightHeadPhotoBmp, leftHeadPhotoBmp, optionalPhotos);
+            }
+        });
     }
 
     private void uploadFilesToCatch(Integer catchId, Bitmap rightHeadPhotoBmp, Bitmap leftHeadPhotoBmp, Map<ImageView,Bitmap> optionalPhotos) {
@@ -188,22 +197,31 @@ public class AddCatchController {
                 .build();
 
         OkHttpClient client = new OkHttpClient();
-        try {
-            Response response = client.newCall(request).execute();
-            boolean status = Boolean.parseBoolean(response.body().string());
-            if (status == false) {
-                Toast.makeText(formFragment.getActivity(), "Odchyt sa nepodarilo pridať pridaný.", Toast.LENGTH_LONG).show();
-                deleteCatchWithId(catchId);
-                formFragment.showButton();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
             }
-            else {
-                Toast.makeText(formFragment.getActivity(), "Odchyt úspešne pridaný.", Toast.LENGTH_LONG).show();
-                formFragment.clear();
-                formFragment.showButton();
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                boolean status = Boolean.parseBoolean(response.body().string());
+                if (!status) {
+                    deleteCatchWithId(catchId);
+                    formFragment.getActivity().runOnUiThread(() -> {
+                        formFragment.setLoading(false);
+                        Toast.makeText(formFragment.getActivity(), "Odchyt sa nepodarilo pridať pridaný.", Toast.LENGTH_LONG).show();
+                    });
+                }
+                else {
+                    formFragment.getActivity().runOnUiThread(() -> {
+                        Toast.makeText(formFragment.getActivity(), "Odchyt úspešne pridaný.", Toast.LENGTH_LONG).show();
+                        formFragment.clear();
+                        formFragment.setLoading(false);
+                    });
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     private Part createPart(String partname, String filename, Bitmap bitmap) {
@@ -235,10 +253,16 @@ public class AddCatchController {
                 .delete()
                 .build();
         OkHttpClient client = new OkHttpClient();
-        try {
-            Response response = client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+            }
+        });
     }
 }

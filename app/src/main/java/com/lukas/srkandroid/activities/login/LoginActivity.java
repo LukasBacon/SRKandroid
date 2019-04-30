@@ -46,9 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         nicknameEditText = findViewById(R.id.nickname);
         passwordEditText = findViewById(R.id.password);
 
-        nicknameEditText.setText("test");
-        passwordEditText.setText("123456");
-
         loginButton = findViewById(R.id.login_btn);
         progressBar = findViewById(R.id.login_progress);
         progressBar.setVisibility(View.INVISIBLE);

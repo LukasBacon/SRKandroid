@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -72,6 +73,7 @@ public class FormFragment extends Fragment {
     private EditText conditionDescriptionText;
     private EditText notesText;
     private View formLayout;
+    private ProgressBar progress;
 
     private ImageView rightHeadPhoto;
     private Bitmap rightHeadPhotoBmp;
@@ -121,6 +123,8 @@ public class FormFragment extends Fragment {
         optionalPhotoInput = view.findViewById(R.id.optionalPhotoInput);
         optionalPhotosList = view.findViewById(R.id.optionalPhotosList);
         formLayout = view.findViewById(R.id.formLayout);
+        progress = view.findViewById(R.id.progress);
+        progress.setVisibility(View.INVISIBLE);
 
         handleUserSelect();
 
@@ -134,7 +138,7 @@ public class FormFragment extends Fragment {
     }
 
     private void handleUserSelect() {
-        if (((AddCatch)getActivity()).getUser().isAdmin() == false) {
+        if (!((AddCatch) getActivity()).getUser().isAdmin()) {
             userSelect.setVisibility(View.GONE);
         }
     }
@@ -181,9 +185,14 @@ public class FormFragment extends Fragment {
         locationText.setText(String.format("lat=%f, lng=%f", location.latitude, location.longitude));
     }
 
-    public void showButton() {
-       addCatchBtn.setVisibility(View.VISIBLE);
-
+    public void setLoading(boolean loading) {
+        if (loading) {
+            addCatchBtn.setVisibility(View.INVISIBLE);
+            progress.setVisibility(View.VISIBLE);
+            return;
+        }
+        addCatchBtn.setVisibility(View.VISIBLE);
+        progress.setVisibility(View.INVISIBLE);
     }
 
     private void pickLocation() {
@@ -270,14 +279,15 @@ public class FormFragment extends Fragment {
     }
 
     private void addCatch() {
-        addCatchBtn.setVisibility(View.INVISIBLE);
+        setLoading(true);
         String errorMessage = validateForm();
         if (errorMessage != null) {
-            addCatchBtn.setVisibility(View.VISIBLE);
+            setLoading(false);
             Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
             return;
         }
         Catch catch0 = createCatchInstanceFromForm();
+        setLoading(true);
         controller.addCatch(catch0, rightHeadPhotoBmp, leftHeadPhotoBmp, optionalPhotos);
     }
 
@@ -344,9 +354,9 @@ public class FormFragment extends Fragment {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("%04d", c.get(Calendar.YEAR)));
         sb.append("-");
-        sb.append(String.format("%02d", c.get(Calendar.MONTH)));
+        sb.append(String.format("%02d", c.get(Calendar.MONTH) + 1));
         sb.append("-");
-        sb.append(String.format("%02d", c.get(Calendar.DAY_OF_MONTH) + 1));
+        sb.append(String.format("%02d", c.get(Calendar.DAY_OF_MONTH)));
         sb.append("T");
         sb.append(String.format("%02d", c.get(Calendar.HOUR_OF_DAY)));
         sb.append(":");
